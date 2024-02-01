@@ -1,14 +1,14 @@
 import os
 import requests as rq
 from twilio.rest import Client
-from twilio.http.http_client import TwilioHttpClient
+# from twilio.http.http_client import TwilioHttpClient
 
 
 ACC_SID = os.environ.get('ACCOUNT_SID')
 AUTH_KEY = os.environ.get('AUTHENTICATION_KEY')
 MY_MOBILE = os.environ.get('MY_MOB_NO')
 
-API_KEY = "8277697bc90ebea4d8369b0622b1491f"
+API_KEY = os.environ.get('OW_API_KEY')
 WEATHER_ENDP = "https://api.openweathermap.org/data/2.5/forecast"
 PARAMS = {
     "lat": "14.691770",
@@ -20,7 +20,7 @@ PARAMS = {
 }
 
 
-response = rq.get(url=WEATHER_ENDP,params=PARAMS)
+response = rq.get(url=WEATHER_ENDP, params=PARAMS)
 response.raise_for_status()
 weather_data = response.json()
 weather_list = weather_data["list"]
@@ -39,11 +39,11 @@ for i in weather_list:
 
 if will_rain:
     # proxy_client = TwilioHttpClient(proxy={'http': os.environ['http_proxy'], 'https': os.environ['https_proxy']})
-    client = Client(ACC_SID, AUTH_KEY ) #http_client=proxy_client
+    client = Client(ACC_SID, AUTH_KEY)  # http_client=proxy_client
     message = client.messages \
-    .create(
-        body= "It's going to rain today, don't forget to bring an ☂️ ",
-        from_= "+18285481059",
-        to= MY_MOBILE,
-    )
+        .create(
+            body="It's going to rain today, don't forget to bring an ☂️ ",
+            from_="+18285481059",
+            to=MY_MOBILE,
+            )
     print(message.status)
